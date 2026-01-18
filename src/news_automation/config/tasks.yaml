@@ -1,0 +1,49 @@
+newsfetch_task:
+  description: >
+    Research the latest and most impactful developments related to {topic}.
+    Use NewsFetcherTool to search latest news.
+    Focus on timely, credible, and noteworthy updates, considering that the
+    current year is {current_year}. Filter out outdated or irrelevant information.
+    Avoid unverified social posts and press releases.
+  expected_output: >
+    A list of 1 items, each formatted as:
+    - Date:
+    - Source:
+    - Headline:
+    - Summary:
+    - URL:
+  agent: news_fetcher
+
+
+news_summary_task:
+  description: >
+    Take the raw news articles produced by newsfetch_task.
+    Generate short, structured summaries using LLMs (Groq/OpenAI).
+    Ensure clarity, remove duplicates, and highlight the most important points.
+    The output must be clean and easy to read.
+  expected_output: >
+    A structured list of 1 summaries.
+  agent: news_summarizer
+
+slack_task:
+  description: >
+    Send the news summaries produced by news_summary_task to Slack.
+    Each summary must be posted as:
+    - Headline
+    - Short Summary
+    - URL
+  expected_output: >
+    Slack message sent successfully with the count of posted summaries.
+  agent: slack_bot
+
+google_sheets_task:
+  description: >
+    Log the news summaries produced by news_summary_task into Google Sheets.
+    Each row must contain:
+      - Date
+      - Headline
+      - Summary
+      - Source URL
+  expected_output: >
+    Google Sheets updated successfully with the count of rows added.
+  agent: google_sheets_logger
